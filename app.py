@@ -9,6 +9,8 @@ query = {'class': 'price price--large'}
 asus_chrome = Item(url, tag_name, query)
 asus_chrome.save_to_mongo()
 
+items_loaded = Item.all()
+print(items_loaded[0].load_price())
 
 # app = Flask(__name__)
 #
