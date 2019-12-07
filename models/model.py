@@ -1,17 +1,19 @@
 from abc import ABCMeta, abstractmethod
 from common.database import Database
 from typing import List, TypeVar, Type, Dict
+
 ''' Check back in to metaclass in Python 
 '''
 
-T =TypeVar('T', bound='Model')
+T = TypeVar('T', bound='Model')
+
 
 class Model(ABCMeta):
-    collection = str #'models'
+    collection = str  # 'models'
     _id: str
 
     def __init__(self, *args, **kwargs):
-        pass
+        super().__init__()
 
     def save_to_mongo(self):
         Database.update(self.collection, {'id': self._id}, self.json())
@@ -24,7 +26,7 @@ class Model(ABCMeta):
         raise NotImplemented
 
     @classmethod
-    def get_by_id(cls: Type[T], _id:str) ->  T: #"Model"  Item.get_by_id() -> Item, Alert.get_by_id -> Alert
+    def get_by_id(cls: Type[T], _id: str) -> T:  # "Model"  Item.get_by_id() -> Item, Alert.get_by_id -> Alert
         return cls.find_one_by('_id', _id)
 
     @classmethod
@@ -35,7 +37,7 @@ class Model(ABCMeta):
     @classmethod
     def find_one_by(cls: Type[T], attribute: str, value: str) -> T:
         """Single element return"""
-        return cls(**Database.find_one((cls.collection, {attribute: value}))
+        return cls(**Database.find_one((cls.collection, {attribute: value})))
 
     @classmethod
     def find_many_by(cls: Type[T], attribute: str, value: str) -> List[T]:
