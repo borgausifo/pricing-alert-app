@@ -1,13 +1,17 @@
 from bs4 import BeautifulSoup
-from common.database import Database
+# from common.database import Database
 from typing import Dict
+from models.model import Model
 import re
 import uuid
 import requests
 
 
-class Item:
+class Item(Model):
+    collection = 'items'
+
     def __init__(self, url: str, tag_name: str, query: Dict, _id: str = None):
+        super().__init__()
         self.url = url
         self.tag_name = tag_name
         self.query = query
@@ -37,6 +41,16 @@ class Item:
             'query': self.query
         }
 
-    def save_to_mongo(self):
-        Database.initialize()
-        Database.insert(self.collection, self.json())
+    # def save_to_mongo(self):
+    #     Database.initialize()
+    #     Database.insert(self.collection, self.json())
+
+    # @classmethod
+    # def get_by_id(cls, _id) -> 'Item':
+    #     item_json = Database.find_one('items', {'_id': _id})
+    #     return cls(**item_json)
+
+    # @classmethod # Don't need it because of models.model
+    # def all(cls):
+    #     items_from_db = Database.find('items', {})
+    #     return [cls(**item) for item in items_from_db]
